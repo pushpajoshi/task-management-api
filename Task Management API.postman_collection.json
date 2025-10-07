@@ -1,0 +1,911 @@
+{
+	"info": {
+		"_postman_id": "eb4d8d40-24dc-4495-aac6-649db44a48da",
+		"name": "Task Management API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17135852"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"if (jsonData.data && jsonData.data.token) {\r",
+									"    pm.environment.set(\"authToken\", jsonData.data.token);\r",
+									"    console.log(\"Token saved:\", jsonData.data.token);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Mukesh Joshi",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "werty1@gmail.com",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "confirm_password",
+									"value": "123456",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}api/register",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"if (jsonData.data && jsonData.data.token) {\r",
+									"    pm.environment.set(\"authToken\", jsonData.data.token);\r",
+									"    console.log(\"Token saved:\", jsonData.data.token);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "admin@yopmail.com",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"description": "*",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}api/login",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}api/logout",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}api/users",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "pin",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Role",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "admin",
+									"description": "*(user/admin)",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}api/users/2",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}api/users/22",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"users",
+								"22"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Create Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Hotel Manage Assignment",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description of task",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "in-progress",
+									"description": "*(todo , in-progress , done)",
+									"type": "text"
+								},
+								{
+									"key": "due_date",
+									"value": "2025-10-12",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "user_id",
+									"value": "20",
+									"description": "* if login user has role admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}api/tasks",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task List",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}api/tasks",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "todo",
+									"disabled": true
+								},
+								{
+									"key": "assigned_user",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "due_date",
+									"value": "10-12-2025",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Task",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}api/tasks/4",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"tasks",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "hello there title",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "hello there description",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "done",
+									"description": "*(todo ,in-progress, done)",
+									"type": "text"
+								},
+								{
+									"key": "due_date",
+									"value": "2025-10-12",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "user_id",
+									"value": "5",
+									"description": "* if auth user has role admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}api/tasks/4",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"tasks",
+								"4"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "Updated Title",
+									"description": "*",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "updated description",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "done",
+									"description": "*(todo , in-progress,done)",
+									"disabled": true
+								},
+								{
+									"key": "due_date",
+									"value": "10/10/2025",
+									"description": "*",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}api/tasks/5",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"tasks",
+								"5"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "Updated Title",
+									"description": "*",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "updated description",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "done",
+									"description": "*(todo , in-progress,done)",
+									"disabled": true
+								},
+								{
+									"key": "due_date",
+									"value": "10/10/2025",
+									"description": "*",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Add Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "comment",
+									"value": "comment for 3 task",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "attachment",
+									"type": "file",
+									"src": "/C:/Users/Pushpa/Downloads/Laravel Machine Test (1).pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}api/tasks/4/comments",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"tasks",
+								"4",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task Comment List",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}api/tasks/4/comments",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"tasks",
+								"4",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reports&Activity",
+			"item": [
+				{
+					"name": "Task Summary",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "comment",
+									"value": "comment for posts",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "attachment",
+									"type": "file",
+									"src": "/C:/Users/Pushpa/Downloads/Laravel Machine Test (1).pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}api/reports/tasks-summary",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"reports",
+								"tasks-summary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activity Logs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "comment",
+									"value": "comment for posts",
+									"description": "*",
+									"type": "text"
+								},
+								{
+									"key": "attachment",
+									"type": "file",
+									"src": "/C:/Users/Pushpa/Downloads/Laravel Machine Test (1).pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}api/activity-logs?user_id=4&from=2025-10-05&to=2025-10-07",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"activity-logs"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "4"
+								},
+								{
+									"key": "from",
+									"value": "2025-10-05"
+								},
+								{
+									"key": "to",
+									"value": "2025-10-07"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
