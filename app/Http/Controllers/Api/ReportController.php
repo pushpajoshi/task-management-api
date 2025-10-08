@@ -16,58 +16,59 @@ class ReportController extends Controller
    
 
     public function tasksSummary(Request $request)
-{
-    $authUser = Auth::user();
-   $cacheKey = $authUser->role === 'admin' 
-    ? 'reports:tasks-summary' 
-    : 'reports:tasks-summary:user:' . $authUser->id;
+    {
+        $authUser = Auth::user();
+        $cacheKey = $authUser->role === 'admin' 
+        ? 'reports:tasks-summary' 
+        : 'reports:tasks-summary:user:' . $authUser->id;
 
-    $result = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($authUser) {
+        $result = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($authUser) {
 
-        if ($authUser->role == 'admin') {
-            // Admin: all tasks
-            $totalPerStatus = Task::selectRaw('status, count(*) as total')
-                ->groupBy('status')
-                ->get();
+            if ($authUser->role == 'admin') {
+                // Admin: all tasks
+                $totalPerStatus = Task::selectRaw('status, count(*) as total')
+                    ->groupBy('status')
+                    ->get();
 
-            $overdue = Task::where('due_date', '<', now()->toDateString())
-                ->where('status', '!=', 'done')
-                ->count();
+                $overdue = Task::where('due_date', '<', now()->toDateString())
+                    ->where('status', '!=', 'done')
+                    ->count();
 
-            $tasksPerUser = Task::selectRaw('user_id, count(*) as total')
-                ->groupBy('user_id')
-                  ->with([
-                    'user' => fn($q) => $q->simpleDetails(),
-                ])->whereHas('user')->get();
+                $tasksPerUser = Task::selectRaw('user_id, count(*) as total')
+                    ->groupBy('user_id')
+                    ->with([
+                        'user' => fn($q) => $q->simpleDetails(),
+                    ])->whereHas('user')->get();
 
-            return [
-                'total_per_status' => $totalPerStatus,
-                'overdue_count'    => $overdue,
-                'tasks_per_user'   => $tasksPerUser
-            ];
-        } else {
-            // Non-admin: only their tasks
-            $totalPerStatus = Task::where('user_id', $authUser->id)
-                ->selectRaw('status, count(*) as total')
-                ->groupBy('status')
-                ->get();
+                return [
+                    'total_per_status' => $totalPerStatus,
+                    'overdue_count'    => $overdue,
+                    'tasks_per_user'   => $tasksPerUser
+                ];
+            } else {
+                // Non-admin: only their tasks
+                $totalPerStatus = Task::where('user_id', $authUser->id)
+                    ->selectRaw('status, count(*) as total')
+                    ->groupBy('status')
+                    ->get();
 
-            $overdue = Task::where('user_id', $authUser->id)
-                ->where('due_date', '<', now()->toDateString())
-                ->where('status', '!=', 'done')
-                ->count();
+                $overdue = Task::where('user_id', $authUser->id)
+                    ->where('due_date', '<', now()->toDateString())
+                    ->where('status', '!=', 'done')
+                    ->count();
 
-            return [
-                'total_per_status' => $totalPerStatus,
-                'overdue_count'    => $overdue,
-            ];
-        }
-    });
+                return [
+                    'total_per_status' => $totalPerStatus,
+                    'overdue_count'    => $overdue,
+                ];
+            }
+        });
 
-    return send_response(200, __('api.succ'),$result);   
-}
+        return send_response(200, __('api.succ'),$result);   
+    }
 
 
+    //Activity logs 
     public function activityLogs(Request $request){
         $query = ActivityLog::query();
         $authUser = Auth::user();

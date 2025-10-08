@@ -67,6 +67,33 @@ A Postman collection is provided to test all API endpoints.
   ```bash
   php artisan serve
 
+## for Email Notification setting (using gmail)
+1. Go to your Google Account Security Settings
+2. Under Signing in to Google click App passwords
+3. Choose Mail → Other (Custom name) → enter project name
+4. Copy the 16-character password generated — use it in your .env
+
+## Update details in your .env file 
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_generated_app_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=your_email@gmail.com
+MAIL_FROM_NAME="${APP_NAME}"
+
+## for Email Notification setting (using mailtrap)
+
+1. Create an account / sign in on mailtrap
+2. Open your Sandbox / Inbox
+3. Open the Integration=> smtp tab
+4. on code sample select php: laravel9+ and coppy that credentials and use it in .env file
+
+
+
+
+
 
 
 

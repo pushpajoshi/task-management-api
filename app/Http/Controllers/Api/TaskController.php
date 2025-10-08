@@ -20,11 +20,6 @@ class TaskController extends Controller
     public function store(TaskRequest $request){
         $data = $request->validated();
         // Only admin can assign tasks to others
-        if(Auth::user()->role !== 'admin'){
-            $data['user_id'] = Auth::user()->id;
-        }else{
-            $data['user_id'] = $request->user_id;
-        }
         $task = Task::create($data);
         ActivityLog::create(['user_id'=>auth()->id(),'action'=>'create','entity_type'=>'task','entity_id'=>$task->id]);
         // If assigned to someone else, dispatch notification via job
@@ -52,6 +47,8 @@ class TaskController extends Controller
         }
 
         if ($request->due_date) {
+               $request->validate([
+                'due_date' => 'date_format:Y-m-d']);
             // Make sure due_date is in Y-m-d format for DB
             $date = Carbon::parse($request->due_date)->format('Y-m-d');
             $query->whereDate('due_date', $date);
@@ -96,7 +93,14 @@ class TaskController extends Controller
             return send_error(__('api.err_unautorized_update_task'),null,403, false);
         }
         $data = $request->validated();
-        $data['user_id'] = $request->user_id ?? Auth::id();
+         //Role-based restrictions
+        if ($user->role !== 'admin') {
+            // If normal user, allow only status update
+            $data = $request->only('status');
+        } else {
+            // If admin, allow everything
+            $data['user_id'] = $request->user_id ?? $task->user_id;
+        }
         $task->update($data);
         ActivityLog::create(['user_id'=>Auth::id(),'action'=>'update','entity_type'=>'task','entity_id'=>$task->id]);
         return send_response(200, __('api.succ_task_updated'),$task);   

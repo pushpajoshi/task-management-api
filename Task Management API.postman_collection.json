@@ -51,7 +51,7 @@
 								},
 								{
 									"key": "email",
-									"value": "werty1@gmail.com",
+									"value": "mukesh@gmail.com",
 									"description": "*",
 									"type": "text"
 								},
@@ -66,12 +66,6 @@
 									"value": "123456",
 									"description": "*",
 									"type": "text"
-								},
-								{
-									"key": "role",
-									"value": "",
-									"type": "text",
-									"disabled": true
 								}
 							]
 						},
@@ -141,13 +135,13 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "admin@yopmail.com",
+									"value": "user@yopmail.com",
 									"description": "*",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "123456",
+									"value": "password123",
 									"description": "*",
 									"type": "text"
 								}
@@ -383,7 +377,7 @@
 							"formdata": [
 								{
 									"key": "title",
-									"value": "Hotel Manage Assignment",
+									"value": "Testing Task",
 									"description": "*",
 									"type": "text"
 								},
@@ -394,7 +388,7 @@
 								},
 								{
 									"key": "status",
-									"value": "in-progress",
+									"value": "todo",
 									"description": "*(todo , in-progress , done)",
 									"type": "text"
 								},
@@ -406,8 +400,8 @@
 								},
 								{
 									"key": "user_id",
-									"value": "20",
-									"description": "* if login user has role admin",
+									"value": "2",
+									"description": "* ",
 									"type": "text"
 								}
 							]
@@ -576,20 +570,20 @@
 								},
 								{
 									"key": "user_id",
-									"value": "5",
+									"value": "2",
 									"description": "* if auth user has role admin",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{base_url}}api/tasks/4",
+							"raw": "{{base_url}}api/tasks/1",
 							"host": [
 								"{{base_url}}api"
 							],
 							"path": [
 								"tasks",
-								"4"
+								"1"
 							],
 							"query": [
 								{

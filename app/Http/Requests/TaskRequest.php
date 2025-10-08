@@ -25,20 +25,24 @@ class TaskRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        $user = Auth::user();
+
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            if ($user && $user->role !== 'admin') {
+                // If normal user, allow only status update
+                return [
+                    'status' => 'required|in:todo,in-progress,done',
+                ];
+            }
+        }
         $rules= [
             'title'=>'required|string|max:255',
             'description'=>'nullable|string',
             'status'=>'required|in:todo,in-progress,done',
             'due_date'=>'required|date|date_format:Y-m-d',
+            'user_id' => 'required|exists:users,id',
         ];
-
-        if (Auth::user()->role == 'admin') {  // using spatie roles
-            $rules['user_id'] = 'required|exists:users,id';
-        } else {
-            // Optional for admin
-            $rules['user_id'] = 'nullable|exists:users,id';
-        }
-
         return $rules;
     }
 
@@ -58,7 +62,7 @@ class TaskRequest extends FormRequest
             'due_date.date' => 'The due date must be a valid date.',
             'due_date.date_format' => 'The due date must be in Y-m-d format (e.g., 2025-10-07).',
 
-            'user_id.required' => 'Please assign a user to this task (required for admin).',
+            'user_id.required' => 'Please assign a user to this task.',
             'user_id.exists' => 'The selected user does not exist in our records.',
         ];
     }

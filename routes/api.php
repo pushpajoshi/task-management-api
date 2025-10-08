@@ -34,14 +34,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/users', [UserController::class,'index']);
         Route::put('/users/{id}', [UserController::class,'updateRole']);
         Route::delete('/users/{id}', [UserController::class,'destroy']);
+        Route::post('/tasks', [TaskController::class,'store']); //only admin can assign/create task
+        Route::delete('/tasks/{id}', [TaskController::class,'destroy']); //only admin can delte task
+
     });
 
     // Tasks API's
-    Route::post('/tasks', [TaskController::class,'store']);
     Route::get('/tasks', [TaskController::class,'index']);
     Route::get('/tasks/{id}', [TaskController::class,'show']);
     Route::put('/tasks/{id}', [TaskController::class,'update']);
-    Route::delete('/tasks/{id}', [TaskController::class,'destroy']);
 
     //Comments
     Route::post('/tasks/{id}/comments', [CommentController::class,'store']);
