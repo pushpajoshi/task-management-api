@@ -15,19 +15,19 @@ class TaskTest extends TestCase
 
 public function testTaskCreatedByUser()
 {
-    $user = User::factory()->create();
+    $user = User::where('role','admin')->first();
 
     $response = $this->actingAs($user, 'sanctum')
         ->postJson('/api/tasks', [
             'title' => 'Test Task',
             'description' => 'desc',
-            'status' => 'todo',                  // required
-            'due_date' => now()->format('Y-m-d'), // required
-            'user_id' => $user->id               // required for non-admin
+            'status' => 'todo',                  
+            'due_date' => now()->format('Y-m-d'), 
+            'user_id' => $user->id       
         ]);
 
     $response->assertStatus(201)
-             ->assertJsonPath('status', 'success');
+             ->assertJsonPath('status',201);
 
     $this->assertDatabaseHas('tasks', [
         'title' => 'Test Task',

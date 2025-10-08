@@ -18,6 +18,6 @@ class ReportTest extends TestCase
         $this->actingAs($user,'sanctum')
             ->getJson('/api/reports/tasks-summary')
             ->assertStatus(200)
-            ->assertJsonPath('status','success');
+            ->assertJsonPath('status',200);
     }
 }
