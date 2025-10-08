@@ -94,6 +94,7 @@ class TaskController extends Controller
         }
         $data = $request->validated();
          //Role-based restrictions
+         $user = Auth::user();
         if ($user->role !== 'admin') {
             // If normal user, allow only status update
             $data = $request->only('status');

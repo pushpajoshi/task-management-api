@@ -43,7 +43,7 @@ class Usercontroller extends Controller
         }
 
         $user->update(['role' => $request->role]);
-        return send_response(200, __('api.succ_userr_role_update'), $user);   
+        return send_response(200, __('api.succ_user_role_update'), $user);   
     } 
 
     public function destroy($id)
